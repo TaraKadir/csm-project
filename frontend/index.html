@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="sv">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Produkter</title>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.9.0/axios.min.js"
+      integrity="sha512-FPlUpimug7gt7Hn7swE8N2pHw/+oQMq/+R/hH/2hZ43VOQ+Kjh25rQzuLyPz7aUWKlRpI7wXbY6+U3oFPGjPOA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+  </head>
+  <body>
+    <h2>Logga in</h2>
+    <form id="login-form">
+      <label>Inloggning</label><br />
+      <input type="text" name="identifier" value="" autocomplete="off" /><br />
+      <label>Lösenord</label><br />
+      <input
+        type="password"
+        name="password"
+        value=""
+        autocomplete="off"
+      /><br />
+      <button type="submit">Logga in</button>
+    </form>
+
+    <h2>Registrera dig här:</h2>
+    <form id="register-form">
+      <label>Användarnamn</label><br />
+      <input type="text" name="username" value="" autocomplete="off" /><br />
+      <label>E-postadress</label><br />
+      <input type="email" name="email" value="" autocomplete="off" /><br />
+      <label>Lösenord</label><br />
+      <input
+        type="password"
+        name="password"
+        value=""
+        autocomplete="off"
+      /><br />
+      <button type="submit">Registrera</button>
+    </form>
+
+    <h2>Produktlista</h2>
+    <div id="product-list"></div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
