@@ -53,7 +53,7 @@ async function fetchBooks() {
   try {
     const res = await axios.get(`${API_BASE}/api/books?populate=cover`);
     const books = res.data.data;
-    console.log("Böcker från API:", books); // <-- lägg till denna rad
+    console.log("Böcker från API:", books);
     renderBooks(books);
   } catch (err) {
     console.error("Kunde inte hämta böcker:", err);
@@ -70,14 +70,24 @@ function renderBooks(books) {
 
     const title = attrs.title;
     const author = attrs.author;
+    const pages = attrs.pages;
+    const releaseDate = attrs.releaseDate;
     const image = attrs.cover?.[0]?.url;
-
-    console.log("Titel:", title, "Bild-url:", image);
 
     const el = document.createElement("div");
     el.innerHTML = `
         <h3>${title}</h3>
         <p>Författare: ${author}</p>
+        <p>Antal sidor: ${pages}</p>
+        <p>Utgivningsdatum: ${new Date(releaseDate).toLocaleDateString(
+          "sv-SE",
+          {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+          }
+        )}</p>
+
         ${
           image
             ? `<img src="${API_BASE}${image}" width="150" alt="${title}" />`
