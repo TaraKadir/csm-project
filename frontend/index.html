@@ -14,33 +14,26 @@
   <body>
     <h2>Logga in</h2>
     <form id="login-form">
-      <label>Inloggning</label><br />
-      <input type="text" name="identifier" value="" autocomplete="off" /><br />
+      <label>Inloggning (e-post)</label><br />
+      <input type="text" name="identifier" autocomplete="off" /><br />
       <label>Lösenord</label><br />
-      <input
-        type="password"
-        name="password"
-        value=""
-        autocomplete="off"
-      /><br />
+      <input type="password" name="password" autocomplete="off" /><br />
       <button type="submit">Logga in</button>
     </form>
 
     <h2>Registrera dig här:</h2>
     <form id="register-form">
       <label>Användarnamn</label><br />
-      <input type="text" name="username" value="" autocomplete="off" /><br />
+      <input type="text" name="username" autocomplete="off" /><br />
       <label>E-postadress</label><br />
-      <input type="email" name="email" value="" autocomplete="off" /><br />
+      <input type="email" name="email" autocomplete="off" /><br />
       <label>Lösenord</label><br />
-      <input
-        type="password"
-        name="password"
-        value=""
-        autocomplete="off"
-      /><br />
+      <input type="password" name="password" autocomplete="off" /><br />
       <button type="submit">Registrera</button>
     </form>
+
+    <p id="logged-in-user" style="font-weight: bold"></p>
+    <button id="logout-btn" style="display: none">Logga ut</button>
 
     <h2>Böcker</h2>
     <div id="book-list"></div>
