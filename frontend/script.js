@@ -119,3 +119,34 @@ function renderBooks(books) {
 }
 
 fetchBooks();
+
+// HÄMTA OCH APPLICERA TEMA
+async function fetchAndApplyTheme() {
+  try {
+    const res = await axios.get(`${API_BASE}/api/themes`);
+    const themes = res.data.data;
+
+    if (!Array.isArray(themes) || themes.length === 0) {
+      throw new Error("Inget tema hittades");
+    }
+
+    const theme = themes[0]?.attributes;
+
+    if (!theme?.backgroundColor || !theme?.primaryColor) {
+      throw new Error("Temat saknar färgvärden");
+    }
+
+    document.documentElement.style.setProperty(
+      "--bg-color",
+      theme.backgroundColor
+    );
+    document.documentElement.style.setProperty(
+      "--primary-color",
+      theme.primaryColor
+    );
+
+    console.log("Tema applicerat:", theme);
+  } catch (err) {
+    console.error("Kunde inte hämta tema:", err.message);
+  }
+}

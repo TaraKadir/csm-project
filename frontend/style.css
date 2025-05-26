@@ -1,0 +1,8 @@
+body {
+  background-color: var(--bg-color, white);
+  color: var(--primary-color, black);
+}
+
+h3 {
+  color: var(--primary-color);
+}
