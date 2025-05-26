@@ -48,38 +48,46 @@ document.getElementById("login-form").addEventListener("submit", async (e) => {
   }
 });
 
-// HÄMTA PRODUKTER
-async function fetchProducts() {
+// HÄMTA BÖCKER
+async function fetchBooks() {
   try {
-    const res = await axios.get(`${API_BASE}/api/products?populate=image`);
-    console.log("Produkter från API:", res.data);
-    const products = res.data.data;
-    renderProducts(products);
+    const res = await axios.get(`${API_BASE}/api/books?populate=cover`);
+    const books = res.data.data;
+    console.log("Böcker från API:", books); // <-- lägg till denna rad
+    renderBooks(books);
   } catch (err) {
-    console.error("Kunde inte hämta produkter:", err);
+    console.error("Kunde inte hämta böcker:", err);
   }
 }
 
-// VISA PRODUKTER
-function renderProducts(products) {
-  const list = document.getElementById("product-list");
+// VISA BÖCKER
+function renderBooks(books) {
+  const list = document.getElementById("book-list");
   list.innerHTML = "";
 
-  products.forEach((product) => {
-    const name = product.name || product.attributes?.name;
-    const price = product.price || product.attributes?.price;
-    const image = product.image || product.attributes?.image;
-    const imgUrl = image?.url ? `${API_BASE}${image.url}` : null;
+  books.forEach((book) => {
+    const attrs = book.attributes ?? book;
+
+    const title = attrs.title;
+    const author = attrs.author;
+    const image = attrs.cover?.[0]?.url;
+
+    console.log("Titel:", title, "Bild-url:", image);
 
     const el = document.createElement("div");
     el.innerHTML = `
-        <h3>${name}</h3>
-        <p>Pris: ${price} kr</p>
-        ${imgUrl ? `<img src="${imgUrl}" width="150" alt="${name}" />` : ""}
+        <h3>${title}</h3>
+        <p>Författare: ${author}</p>
+        ${
+          image
+            ? `<img src="${API_BASE}${image}" width="150" alt="${title}" />`
+            : ""
+        }
         <hr/>
       `;
+
     list.appendChild(el);
   });
 }
 
-fetchProducts();
+fetchBooks();
