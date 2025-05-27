@@ -86,12 +86,12 @@ function renderBooks(books) {
 
   books.forEach((book) => {
     const attrs = book.attributes ?? book;
-
     const title = attrs.title;
     const author = attrs.author;
     const pages = attrs.pages;
     const releaseDate = attrs.releaseDate;
     const image = attrs.cover?.[0]?.url;
+    const bookId = book.id;
 
     const el = document.createElement("div");
     el.innerHTML = `
@@ -111,6 +111,12 @@ function renderBooks(books) {
             ? `<img src="${API_BASE}${image}" width="150" alt="${title}" />`
             : ""
         }
+  
+        <div>
+          <label>Betyg (1–10):</label>
+          <input type="number" min="1" max="10" id="rating-${bookId}" />
+          <button onclick="submitRating(${bookId})">Spara betyg</button>
+        </div>
         <hr/>
       `;
 
@@ -148,5 +154,47 @@ async function fetchAndApplyTheme() {
     console.log("Tema applicerat:", theme);
   } catch (err) {
     console.error("Kunde inte hämta tema:", err.message);
+  }
+}
+async function submitRating(bookId) {
+  const jwt = localStorage.getItem("jwt");
+  const storedUser = localStorage.getItem("user");
+
+  if (!jwt || !storedUser) {
+    alert("Du måste vara inloggad för att betygsätta.");
+    return;
+  }
+
+  const user = JSON.parse(storedUser);
+  const input = document.getElementById(`rating-${bookId}`);
+  const value = parseInt(input.value);
+
+  if (!value || value < 1 || value > 10) {
+    alert("Ange ett betyg mellan 1 och 10");
+    return;
+  }
+
+  try {
+    const res = await axios.post(
+      `${API_BASE}/api/ratings`,
+      {
+        data: {
+          value,
+          user: user.id,
+          book: bookId,
+        },
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      }
+    );
+
+    alert("Betyg sparat!");
+    console.log(res.data);
+  } catch (err) {
+    alert("Kunde inte spara betyget.");
+    console.error(err);
   }
 }
