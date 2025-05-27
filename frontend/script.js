@@ -95,36 +95,98 @@ function renderBooks(books) {
 
     const el = document.createElement("div");
     el.innerHTML = `
-        <h3>${title}</h3>
-        <p>Författare: ${author}</p>
-        <p>Antal sidor: ${pages}</p>
-        <p>Utgivningsdatum: ${new Date(releaseDate).toLocaleDateString(
-          "sv-SE",
-          {
-            day: "numeric",
-            month: "long",
-            year: "numeric",
-          }
-        )}</p>
-        ${
-          image
-            ? `<img src="${API_BASE}${image}" width="150" alt="${title}" />`
-            : ""
-        }
-  
-        <div>
-          <label>Betyg (1–10):</label>
-          <input type="number" min="1" max="10" id="rating-${bookId}" />
-          <button onclick="submitRating(${bookId})">Spara betyg</button>
-        </div>
-        <hr/>
-      `;
+  <h3>${title}</h3>
+  <p>Författare: ${author}</p>
+  <p>Antal sidor: ${pages}</p>
+  <p>Utgivningsdatum: ${new Date(releaseDate).toLocaleDateString("sv-SE", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  })}</p>
+  ${image ? `<img src="${API_BASE}${image}" width="150" alt="${title}" />` : ""}
+
+  <div>
+    <label>Betyg (1–10):</label>
+    <input type="number" min="1" max="10" id="rating-${bookId}" />
+    <button onclick="submitRating(${bookId})">Spara betyg</button>
+  </div>
+
+  <div>
+    <button onclick="saveBook(${bookId})">Spara bok</button>
+  </div>
+
+  <hr/>
+`;
 
     list.appendChild(el);
   });
 }
 
-fetchBooks();
+// HÄMTA ANVÄNDARENS SPARADE BÖCKER
+async function saveBook(bookId) {
+  const jwt = localStorage.getItem("jwt");
+  const storedUser = localStorage.getItem("user");
+
+  if (!jwt || !storedUser) {
+    alert("Du måste vara inloggad för att spara böcker.");
+    return;
+  }
+
+  const user = JSON.parse(storedUser);
+
+  try {
+    const res = await axios.post(
+      `${API_BASE}/api/saved-books`,
+      {
+        data: {
+          book: bookId,
+          users_permissions_user: user.id,
+        },
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      }
+    );
+
+    alert("Boken sparades!");
+    fetchSavedBooks();
+  } catch (err) {
+    alert("Kunde inte spara boken.");
+    console.error(err.response?.data || err);
+  }
+}
+
+function renderSavedBooks(savedBooks) {
+  const list = document.getElementById("saved-book-list");
+  list.innerHTML = "";
+
+  savedBooks.forEach((book) => {
+    const el = document.createElement("div");
+    el.innerHTML = `
+        <h4>${book.title}</h4>
+        <p>Författare: ${book.author}</p>
+        <hr/>
+      `;
+    list.appendChild(el);
+  });
+}
+
+// DUMMY DATA
+function fetchSavedBooks() {
+  const savedBooks = [
+    {
+      title: "The Glass Harbor",
+      author: "Amaya Linde",
+    },
+    {
+      title: "Whispering Pines",
+      author: "Clara M. Grey",
+    },
+  ];
+  renderSavedBooks(savedBooks);
+}
 
 // HÄMTA OCH APPLICERA TEMA
 async function fetchAndApplyTheme() {
@@ -198,3 +260,6 @@ async function submitRating(bookId) {
     console.error(err.response?.data || err);
   }
 }
+
+fetchBooks();
+fetchSavedBooks();
