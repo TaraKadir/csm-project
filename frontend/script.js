@@ -180,8 +180,8 @@ async function submitRating(bookId) {
       {
         data: {
           value,
-          user: user.id,
-          book: bookId,
+          user: { connect: [user.id] },
+          book: { connect: [bookId] },
         },
       },
       {
@@ -195,6 +195,6 @@ async function submitRating(bookId) {
     console.log(res.data);
   } catch (err) {
     alert("Kunde inte spara betyget.");
-    console.error(err);
+    console.error(err.response?.data || err);
   }
 }
