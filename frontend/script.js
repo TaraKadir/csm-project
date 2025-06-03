@@ -173,7 +173,7 @@ function renderSavedBooks(savedBooks) {
   });
 }
 
-// DUMMY DATA
+// DUMMY DATA: tills Strapi fungerar korrekt
 function fetchSavedBooks() {
   const savedBooks = [
     {

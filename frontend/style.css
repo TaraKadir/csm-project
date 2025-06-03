@@ -28,6 +28,7 @@ input {
 
 button {
   padding: 0.5rem 1rem;
+  margin-top: 5px;
   background-color: var(--primary-color);
   color: white;
   border: none;
@@ -59,19 +60,8 @@ img {
   color: green;
 }
 
-button {
-  padding: 8px 12px;
-  margin-top: 5px;
-  cursor: pointer;
-}
-
-button + button {
-  margin-left: 10px;
-}
-
 .save-btn {
   background-color: #e0e0e0;
-  border: none;
   color: #000;
 }
 
