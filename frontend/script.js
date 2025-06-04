@@ -139,8 +139,12 @@ async function saveBook(bookId) {
       `${API_BASE}/api/saved-books`,
       {
         data: {
-          book: bookId,
-          users_permissions_user: user.id,
+          book: {
+            connect: [bookId],
+          },
+          user: {
+            connect: [user.id],
+          },
         },
       },
       {
@@ -187,6 +191,38 @@ function fetchSavedBooks() {
   ];
   renderSavedBooks(savedBooks);
 }
+
+/*async function fetchSavedBooks() {
+  const jwt = localStorage.getItem("jwt");
+  const storedUser = localStorage.getItem("user");
+
+  if (!jwt || !storedUser) return;
+
+  const user = JSON.parse(storedUser);
+
+  try {
+    const res = await axios.get(
+      `${API_BASE}/api/saved-books?populate=book&filters[user][id]=${user.id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      }
+    );
+
+    const savedBooks = res.data.data.map((entry) => {
+      const book = entry.attributes.book.data.attributes;
+      return {
+        title: book.title,
+        author: book.author,
+      };
+    });
+
+    renderSavedBooks(savedBooks);
+  } catch (err) {
+    console.error("Kunde inte hämta sparade böcker:", err);
+  }
+}*/
 
 // HÄMTA OCH APPLICERA TEMA
 async function fetchAndApplyTheme() {
@@ -263,3 +299,4 @@ async function submitRating(bookId) {
 
 fetchBooks();
 fetchSavedBooks();
+fetchAndApplyTheme();
